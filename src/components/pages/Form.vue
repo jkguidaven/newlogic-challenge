@@ -36,7 +36,7 @@ export default {
   mounted() {
     if(!this.name || this.name.trim() == "" ||
       !this.language || this.language.trim() == "") {
-        Router.push("/home");
+        Router.push("/");
     }
   }
 }

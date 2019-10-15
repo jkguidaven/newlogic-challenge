@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: 'Consents'
+  name: 'List'
 }
 </script>
