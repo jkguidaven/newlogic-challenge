@@ -1,6 +1,5 @@
 <template>
-  <section>
-    <h1>Consent Form</h1>
+  <Content title="Consent Form">
     <form>
       <div class="form-group">
         <label for="Name">Email address</label>
@@ -16,23 +15,25 @@
             v-bind:value="language.value">{{ language.text }}</option>
         </select>
       </div>
-
       
       <div class="btn-group float-right">
-        <button type="button" class="btn  pull-right btn-success" v-on:click="onNextPress">
+        <button type="button" class="btn btn-success" v-on:click="onNextPress">
           Next <i class="fa fa-arrow-right" />
         </button>
       </div>
     </form>
-  </section>
+  </Content>
 </template>
 
 <script>
-import { Router } from '../../routes'
+import Content from '../common/Content';
+import { Router } from '../../routes';
 
 export default {
   name: 'Home',
-
+  components: {
+    Content
+  },
   data () {
     return {
         currentName: "",

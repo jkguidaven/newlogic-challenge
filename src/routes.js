@@ -7,7 +7,7 @@ import VueRouter from 'vue-router';
 export const routes = [
     { path: "/", label: "Home", component: Home },
     { path: "/consents", label: "Consents", component: List },
-    { path: "/form", component: ConsentForm, props: true },
+    { path: "/form", component: ConsentForm },
     { path: "/confirmation", component: ConsentConfirmation }
 ];
 
