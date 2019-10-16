@@ -1,15 +1,12 @@
 <template>
   <Content title="Consent Form">
-    <p>
-      You understand that by using this site or site services, you agree to be bound
-      by this agreement. If you do not accept this agreement in its entirety, you must
-      not access or use the site or the site services.
-    </p>
-    
-    <p>
-      Do you agree to this agreement? Please response by saying "{{ language.translation.yes }}"
-      or "{{ language.translation.no }}".
-    </p>
+    <Reader
+      :data="[
+        language.translation.message,
+        language.translation.instruction
+      ]"
+      :language="language.code"
+    />
 
     <!-- Audio recording component -->
     <AudioRecorder
@@ -44,6 +41,7 @@
 <script>
   import AudioRecorder from '../common/AudioRecorder';
   import AudioResult from '../common/AudioResult';
+  import Reader from '../common/Reader';
   import { ConsentsRepository } from '../../repository';
   import Content from '../common/Content';
   import { Router } from '../../routes';
@@ -52,6 +50,7 @@
   const components = {
       AudioRecorder,
       AudioResult,
+      Reader,
       Content
   }
 

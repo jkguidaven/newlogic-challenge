@@ -19,7 +19,7 @@
     components: {
       Content
     }
-  }
+  };
 </script>
 
 <style scoped>
