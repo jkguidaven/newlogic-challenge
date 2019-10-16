@@ -19,7 +19,7 @@
         language.translation.yes,
         language.translation.no
       ]"
-      :language="language.code"
+      :lang="language.code"
     />
     <!-- response is displayed here -->
     <AudioResult

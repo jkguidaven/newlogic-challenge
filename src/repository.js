@@ -6,6 +6,10 @@ const TABLE_NAME = 'list';
 class Repository
 {
     constructor() {
+        this.init();
+    }
+
+    init(callBack = null) {
         let request = window.indexedDB.open(DB_NAME, 1);
 
         // We setup our DB schema here
@@ -22,6 +26,8 @@ class Repository
         
         request.onsuccess = () => {
             this.db = request.result;
+            if(callBack)
+                callBack(this.db);
         };
     }
 
@@ -35,17 +41,10 @@ class Repository
         }
     }
 
-    delete(id, successCallBack, errorCallBack) {
-        if(this.db) {
-            let transaction = this.db.transaction([TABLE_NAME], 'readwrite');
-            let store = transaction.objectStore(TABLE_NAME);
-            let request = store.delete(id);
-            request.onsuccess = successCallBack;
-            request.onerror = errorCallBack;
-        }
-    }
-
-    load(callBack) {
+    /*
+     * @reinit - we need this flag to determine if we need to reinitialize our DB
+    */
+    load(callBack, reinit = false) {
         let result = [];
         if(this.db) {
             var store = this.db.transaction(TABLE_NAME).objectStore(TABLE_NAME);
@@ -59,6 +58,16 @@ class Repository
                     callBack(result);
                }
             };
+        } else if(reinit) {
+            /*
+             * sometimes we are calling this repository to early that it 
+             * is still initializing. we need to reinit it with callback.
+             * We should be doing this w/ other function but right now
+             * only the load function is called to early on this app.
+            */
+            this.init(() => {
+                this.load(callBack);
+            });
         }
     }
 }

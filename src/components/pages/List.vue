@@ -22,10 +22,10 @@
         consents: []
       };
     },
-    created: function () {
+    mounted: function () {
       ConsentsRepository.load((result) => {
         this.consents = result;
-      });
+      }, true);
     }
   }
 </script>
