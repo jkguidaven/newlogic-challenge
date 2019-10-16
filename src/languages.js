@@ -16,8 +16,8 @@ export const Languages = {
                 `Do you agree to this agreement? Please response by saying "Yes" or "No".`
         }
     },
-    "fr": {
-        code: "fr",
+    "fr-FR": {
+        code: "fr-FR",
         label: "French",
         translation: {
             yes: "Oui",

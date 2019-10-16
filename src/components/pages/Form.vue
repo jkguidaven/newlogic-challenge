@@ -1,11 +1,13 @@
 <template>
   <Content title="Consent Form">
+    <!-- Consent Message Here -->
     <Reader
       :data="[
         language.translation.message,
         language.translation.instruction
       ]"
       :language="language.code"
+      @onCompleteRead="isReading = false"
     />
 
     <!-- Audio recording component -->
@@ -16,7 +18,8 @@
         language.translation.yes,
         language.translation.no
       ]"
-      :lang="language.code"
+      :language="language.code"
+      :disabled="isReading"
     />
     <!-- response is displayed here -->
     <AudioResult
@@ -85,6 +88,7 @@
         language: Languages[this.$route.query.language],
         name: this.$route.query.name,
         response: null,
+        isReading: true
       }
     },
     mounted: function () {

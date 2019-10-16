@@ -4,7 +4,7 @@
       type="button"
       class="audio-recorder-button"
       v-if="!onRecord && !onNoAudio"
-      :disabled="!recognition"
+      :disabled="!recognition || disabled"
       @click="beginRecording"
     >
       <i v-if="recognition" class="fa fa-microphone"></i>
@@ -15,7 +15,7 @@
       type="button"
       class="stop-button"
       v-if="onRecord && !onNoAudio"
-      :disabled="!recognition"
+      :disabled="!recognition || disabled"
       @click="stopRecording"
     >
       <i class="fa fa-stop"></i>
@@ -65,7 +65,8 @@
     methods,
     props: {
       'language': String,
-      'expect': Array
+      'expect': Array,
+      'disabled': Boolean
     },
     data: function () {
       return {
@@ -96,7 +97,7 @@
 
           // we only care about the current transcript result
           const transcript = event.results[event.resultIndex][0].transcript;
-          
+
           /*
            * If we get expected words from the transcript result, we then
            * stop the recording and emit it as a response result
