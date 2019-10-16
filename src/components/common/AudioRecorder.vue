@@ -103,7 +103,7 @@
            * stop the recording and emit it as a response result
           */
           this.expect.forEach((value) => {
-            if (value.toLowerCase() == transcript) {
+            if (value.toLowerCase() == transcript.toLowerCase().trim()) {
               const response = {
                 audio: new Blob(this.audioChunks),
                 transcript: value

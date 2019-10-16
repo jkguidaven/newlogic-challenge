@@ -17,7 +17,12 @@
       </div>
       
       <div class="btn-group float-right">
-        <button type="button" class="btn btn-success" v-on:click="onNextPress">
+        <button 
+          type="button"
+          class="btn btn-success"
+          v-on:click="onNextPress"
+          :disabled="currentName.trim() == ''"
+        >
           Next <i class="fa fa-arrow-right" />
         </button>
       </div>

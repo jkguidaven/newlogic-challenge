@@ -27,3 +27,12 @@
     };
 </script>
 
+<style scoped>
+.nav-link {
+    color: black;
+}
+
+.nav-link.router-link-exact-active  {
+    font-weight: bold;
+}
+</style>
