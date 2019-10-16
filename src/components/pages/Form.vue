@@ -7,13 +7,28 @@
     </p>
     
     <p>
-      Do you agree to this agreement? Please response by saying "{{ strYes }}" or "{{ strNo }}".
+      Do you agree to this agreement? Please response by saying "{{ language.translation.yes }}"
+      or "{{ language.translation.no }}".
     </p>
 
-    <AudioRecorder v-if="!response" v-bind:expect="['yes', 'no']" @onResponseRecorded="handleResponse"/>
-    <div v-else>
-      <AudioResult v-bind:transcript="response.transcript" v-bind:audioUrl="response.audioUrl" />
-      <div class="btn-group float-right" >
+    <!-- Audio recording component -->
+    <AudioRecorder
+      v-if="!response"
+      @onResponseRecorded="handleResponse"
+      :expect="[
+        language.translation.yes,
+        language.translation.no
+      ]"
+      :language="language.code"
+    />
+    <!-- response is displayed here -->
+    <AudioResult
+      v-else
+      :transcript="response.transcript"
+      :audio="response.audio"
+    >
+      <!-- actions for clearing or saving consent recorded audio -->
+      <div class="btn-group float-right">
         <button type="button" class="btn btn-success" @click="clear">
           Retry <i class="fa fa-redo" />
         </button>
@@ -22,48 +37,61 @@
           Save <i class="fa fa-arrow-right" />
         </button>
       </div>
-    </div>
+    </AudioResult>
   </Content>
 </template>
 
 <script>
-import AudioRecorder from '../common/AudioRecorder';
-import AudioResult from '../common/AudioResult';
-import Content from '../common/Content';
-import { Router } from '../../routes';
+  import AudioRecorder from '../common/AudioRecorder';
+  import AudioResult from '../common/AudioResult';
+  import { ConsentsRepository } from '../../repository';
+  import Content from '../common/Content';
+  import { Router } from '../../routes';
+  import { Languages } from '../../languages';
 
-export default {
-  name: 'ConsentForm',
-  components: {
-    AudioRecorder,
-    AudioResult,
-    Content
-  },
-  data () {
-    return {
-      strYes: "Yes",
-      strNo: "No",
-      response: null,
-      name: this.$route.query.name,
-      language: this.$route.query.language,
-    }
-  },
-  mounted() {
-    if(!this.name || this.name.trim() == "" ||
-      !this.language || this.language.trim() == "") {
-        Router.push("/");
-    }
-  },
-  methods: {
-    handleResponse(response) {
+  const components = {
+      AudioRecorder,
+      AudioResult,
+      Content
+  }
+
+  const methods = {
+    handleResponse: function (response) {
       this.response = response;
     },
-    clear() {
+    clear: function () {
       this.response = null;
     },
-    save() {
-      Router.push("/confirmation");
+    save: function () {
+      const consent = {
+        response: this.response.transcript == this.language.translation.yes,
+        language: this.language.code,
+        audio: this.response.audio,
+        name: this.name
+      };
+
+      // we know insert the data and wait to finish through callback
+      ConsentsRepository.insert(consent, function () {
+          Router.push("/confirmation");
+        });
+    }
+  };
+  
+  export default {
+    name: 'ConsentForm',
+    components,
+    methods,
+    data: function () {
+      return {
+        language: Languages[this.$route.query.language],
+        name: this.$route.query.name,
+        response: null,
+      }
+    },
+    mounted: function () {
+      if(!this.name || this.name.trim() == "" || !this.language) {
+          Router.push("/");
+      }
     }
   }
-}
 </script>

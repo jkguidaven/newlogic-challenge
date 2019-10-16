@@ -10,9 +10,9 @@
         <label for="Language">Language</label>
         <select class="form-control" id="Language" v-model="currentLanguage" aria-describedby="LanguageHelp" >
           <option
-            v-for="language in languages"
-            v-bind:key="language.value"
-            v-bind:value="language.value">{{ language.text }}</option>
+            v-for="(data, code) in Languages"
+            :key="code"
+            :value="code">{{ data.label }}</option>
         </select>
       </div>
       
@@ -26,26 +26,16 @@
 </template>
 
 <script>
-import Content from '../common/Content';
-import { Router } from '../../routes';
+  import Content from '../common/Content';
+  import { Router } from '../../routes';
+  import { Languages, DefaultLanguage } from '../../languages';
 
-export default {
-  name: 'Home',
-  components: {
+  const components = {
     Content
-  },
-  data () {
-    return {
-        currentName: "",
-        currentLanguage: "EN",
-        languages: [
-        { value: "EN", text: "English"},
-        { value: "FR", text: "French"}
-      ]
-    };
-  },
-  methods: {
-    onNextPress() {
+  };
+
+  const methods = {
+    onNextPress: function () {
       Router.push({
         path: "/form",
         query: {
@@ -54,6 +44,18 @@ export default {
         }
       });
     }
+  };
+
+  export default {
+    name: 'Home',
+    components,
+    methods,
+    data: function () {
+      return {
+          currentName: "",
+          currentLanguage: DefaultLanguage.code,
+          Languages
+      };
+    }
   }
-}
 </script>
